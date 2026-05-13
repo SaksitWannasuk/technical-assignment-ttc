@@ -1,0 +1,37 @@
+<h2 mat-dialog-title>View Person</h2>
+
+<mat-dialog-content>
+  <div class="detail-container">
+    <div>
+      <strong>First Name:</strong>
+      <span>{{ person.firstName }}</span>
+    </div>
+
+    <div>
+      <strong>Last Name:</strong>
+      <span>{{ person.lastName }}</span>
+    </div>
+
+    <div>
+      <strong>Birth Date:</strong>
+      <span>{{ person.birthDate | date: 'yyyy-MM-dd' }}</span>
+    </div>
+
+    <div>
+      <strong>Age:</strong>
+      <span>{{ person.age }}</span>
+    </div>
+
+    <div>
+      <strong>Address:</strong>
+      <span>{{ person.address }}</span>
+    </div>
+ 
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-raised-button color="primary" (click)="close()">
+    Close
+  </button>
+</mat-dialog-actions>

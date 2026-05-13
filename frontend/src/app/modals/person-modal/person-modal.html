@@ -1,0 +1,65 @@
+<h2 mat-dialog-title>Add Person</h2>
+
+<mat-dialog-content>
+
+  <form [formGroup]="form" class="form-container">
+
+    <mat-form-field appearance="outline">
+      <mat-label>ชื่อ</mat-label>
+
+      <input matInput formControlName="firstName">
+      <mat-error *ngIf="form.get('firstName')?.hasError('required')">
+        กรุณากรอกชื่อ
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>นามสกุล</mat-label>
+
+      <input matInput formControlName="lastName">
+      <mat-error *ngIf="form.get('lastName')?.hasError('required')">
+        กรุณากรอกนามสกุล
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>วันเกิด</mat-label>
+
+      <input matInput [matDatepicker]="picker" formControlName="birthDate">
+
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+
+      <mat-datepicker #picker></mat-datepicker>
+
+      <mat-error *ngIf="form.get('birthDate')?.hasError('required')">
+        กรุณาเลือกวันเกิด
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>ที่อยู่</mat-label>
+
+      <textarea matInput rows="3" formControlName="address"></textarea>
+      <mat-error *ngIf="form.get('address')?.hasError('required')">
+        กรุณากรอกที่อยู่
+      </mat-error>
+    </mat-form-field>
+
+  </form>
+
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+
+
+  <button mat-raised-button color="primary" (click)="submit()" [disabled]="form.invalid">
+    บันทึก
+  </button>
+
+  <button mat-raised-button color="primary" (click)="close()">
+    ยกเลิก
+  </button>
+
+
+
+</mat-dialog-actions>
