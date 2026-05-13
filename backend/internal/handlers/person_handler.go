@@ -16,6 +16,17 @@ type CreatePersonRequest struct {
 	Address   string `json:"address"`
 }
 
+type PersonResponse struct {
+	ID        uint      `json:"id"`
+	FirstName string    `json:"firstName"`
+	LastName  string    `json:"lastName"`
+	BirthDate time.Time `json:"birthDate"`
+	Age       int       `json:"age"`
+	Address   string    `json:"address"`
+	CreatedAt time.Time `json:"createdAt"`
+	UpdatedAt time.Time `json:"updatedAt"`
+}
+
 func CreatePerson(c *fiber.Ctx) error {
 	var req CreatePersonRequest
 
@@ -47,12 +58,22 @@ func CreatePerson(c *fiber.Ctx) error {
 		})
 	}
 
-	return c.Status(201).JSON(person)
+	response := PersonResponse{
+		ID:        person.ID,
+		FirstName: person.FirstName,
+		LastName:  person.LastName,
+		BirthDate: person.BirthDate,
+		Age:       CalculateAge(person.BirthDate),
+		Address:   person.Address,
+		CreatedAt: person.CreatedAt,
+		UpdatedAt: person.UpdatedAt,
+	}
+
+	return c.Status(201).JSON(response)
 }
 
 func GetPeople(c *fiber.Ctx) error {
 	var people []models.Person
-
 	result := database.DB.Order("id asc").Find(&people)
 	if result.Error != nil {
 		return c.Status(500).JSON(fiber.Map{
@@ -60,7 +81,22 @@ func GetPeople(c *fiber.Ctx) error {
 		})
 	}
 
-	return c.JSON(people)
+	responses := []PersonResponse{}
+
+	for _, person := range people {
+		responses = append(responses, PersonResponse{
+			ID:        person.ID,
+			FirstName: person.FirstName,
+			LastName:  person.LastName,
+			BirthDate: person.BirthDate,
+			Age:       CalculateAge(person.BirthDate),
+			Address:   person.Address,
+			CreatedAt: person.CreatedAt,
+			UpdatedAt: person.UpdatedAt,
+		})
+	}
+
+	return c.JSON(responses)
 }
 
 func GetPersonByID(c *fiber.Ctx) error {
@@ -75,5 +111,28 @@ func GetPersonByID(c *fiber.Ctx) error {
 		})
 	}
 
-	return c.JSON(person)
+	response := PersonResponse{
+		ID:        person.ID,
+		FirstName: person.FirstName,
+		LastName:  person.LastName,
+		BirthDate: person.BirthDate,
+		Age:       CalculateAge(person.BirthDate),
+		Address:   person.Address,
+		CreatedAt: person.CreatedAt,
+		UpdatedAt: person.UpdatedAt,
+	}
+
+	return c.JSON(response)
+}
+
+func CalculateAge(birthDate time.Time) int {
+	now := time.Now()
+
+	age := now.Year() - birthDate.Year()
+
+	if now.YearDay() < birthDate.YearDay() {
+		age--
+	}
+
+	return age
 }
